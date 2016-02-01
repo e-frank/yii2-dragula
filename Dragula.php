@@ -46,19 +46,43 @@ class Dragula extends \yii\base\Widget {
 	public $options    = null;
 
 	// events
-	public $drag = null;
-	public $drop = null;
-	public $over = null;
-	public $out  = null;
+	public $drag    = null;
+	public $dragend = null;
+	public $drop    = null;
+	public $cancel  = null;
+	public $remove  = null;
+	public $shadow  = null;
+	public $over    = null;
+	public $out     = null;
+	public $cloned  = null;
+
+	const EVENTS  = ['drag', 'dragend', 'drop', 'cancel', 'remove', 'shadow', 'over', 'out', 'cloned'];
+	const PARAMS2 = ['el', 'container', 'source'];
+	const PARAMS  = [
+		'drag'    => ['el', 'source'],
+		'dragend' => ['el'],
+		'drop'    => ['el', 'target', 'source', 'sibling'],
+		'cancel'  => self::PARAMS2,
+		'remove'  => self::PARAMS2,
+		'shadow'  => self::PARAMS2,
+		'over'    => self::PARAMS2,
+		'out'     => self::PARAMS2,
+		'cloned'  => ['clone', 'original', 'type'],
+	];
 
 	public function init() {
 		parent::init();
 
-		if (is_array($this->containers)) {
-			foreach ($this->containers as $key => $container) {
-				if (!($container instanceof JsExpression)) {
-					$this->containers[$key] = new JsExpression(sprintf('document.querySelector(%s)', json_encode($container)));
-				}
+		if ($this->containers == null) {
+			throw new \yii\base\InvalidConfigException("`containers` must be set");
+		}
+
+		if (!is_array($this->containers))
+			$this->containers = [$this->containers];
+
+		foreach ($this->containers as $key => $container) {
+			if (!($container instanceof JsExpression)) {
+				$this->containers[$key] = new JsExpression(sprintf('document.querySelector(%s)', json_encode($container)));
 			}
 		}
 	}
@@ -67,12 +91,12 @@ class Dragula extends \yii\base\Widget {
 		DragulaAsset::register($this->view);
 
 		$events = [];
-		foreach (['drag', 'drop', 'over', 'out'] as $event) {
+		foreach (self::EVENTS as $event) {
 			if ($this->$event !== null) {
 				if ($this->$event instanceof JsExpression) {
 					$events[] = new JsExpression(sprintf('.on("%s", %s)', $event, $this->$event));
 				} else {
-					$events[] = new JsExpression(sprintf('.on("%s", function(el, container) { %s })', $event, $this->$event));
+					$events[] = new JsExpression(sprintf('.on("%s", function(%s) { %s })', $event, implode(',', self::PARAMS[$event]), $this->$event));
 				}
 			}
 		}
