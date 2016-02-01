@@ -1,0 +1,19 @@
+{
+    "name":        "e-frank/yii2-dragula",
+    "description": "asset-bundle and widget for dragula drag and drop library",
+    "keywords":    ["yii2", "javascript", "dragula", "drag", "drop", "drag and drop"],
+    "type":        "yii2-extension",
+    "license":     "BSD-3-Clause",
+    "authors": [
+        {
+            "name":     "Elmar Frank",
+            "homepage": "http://yii.efrank.at/extension/dragula"
+        }
+    ],
+    "require": {
+        "bower-asset/dragula":  "*"
+    },
+    "autoload": {
+        "psr-4": { "x1\\dragula\\": "" }
+    }
+}
