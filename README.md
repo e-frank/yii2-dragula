@@ -1,6 +1,12 @@
 # yii2-dragula
 yii2 extension / widget for dragula drag and drop library
 
+does not require any other libraries than dragula.
+
+for a detailed documentation and demo see [Dragula example page](http://bevacqua.github.io/dragula/)
+
+
+
 
 ## configuration options
 1. 'containers': either array of strings containing the ids of the HTML containers or a JsExpression containing the javascript code for the selector
@@ -11,7 +17,7 @@ yii2 extension / widget for dragula drag and drop library
   3. 'over': JsExpression javascript function ```function (el, container) { ... }```
   4. 'out': JsExpression javascript function ```function (el, container) { ... }```
 
-## example
+## example / usage
 ####1. HTML container for drag and drop items
 ```html
 <ul id="files">
@@ -50,3 +56,7 @@ yii2 extension / widget for dragula drag and drop library
     }
 </script>
 ```
+Note that i used jquery in my example code, which is optional and not referenced by this project.
+
+Also, you have to take care of script loading order yourself!
+
