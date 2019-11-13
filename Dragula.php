@@ -1,4 +1,4 @@
-<?
+<?php
 namespace x1\dragula;
 
 use Yii;
